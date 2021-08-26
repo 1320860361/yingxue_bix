@@ -54,7 +54,9 @@
 
 
         <!--生成对应表及类名-->
-        <table tableName="yx_user" domainObjectName="User" ></table>
+<!--        <table tableName="yx_user" domainObjectName="User" ></table>
+        <table tableName="yx_user" domainObjectName="User" ></table>-->
+        <table tableName="yx_category" domainObjectName="Category" ></table>
 
 
     </context>
