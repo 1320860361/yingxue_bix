@@ -54,7 +54,7 @@
 
 
         <!--生成对应表及类名-->
-        <table tableName="yx_feedback" domainObjectName="Feedback" ></table>
+        <table tableName="yx_user" domainObjectName="User" ></table>
 
 
     </context>
