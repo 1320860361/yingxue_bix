@@ -1,5 +1,6 @@
 package com.baizhi.serviceimpl;
 
+import com.baizhi.annotation.AddLog;
 import com.baizhi.dao.FeedbackMapper;
 import com.baizhi.dao.UserMapper;
 import com.baizhi.entity.Feedback;
@@ -70,6 +71,7 @@ public class UserServiceImpl implements UserService {
        }*//*
         //return map;
     }*/
+   @AddLog(value = "修改用户")
    @Override
    public CommonVo updates(User user) {
        try {

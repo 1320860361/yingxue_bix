@@ -6,4 +6,6 @@ import tk.mybatis.mapper.common.Mapper;
 
 public interface CategoryMapper extends Mapper<Category> {
 
+    Category queryAllByIdS (String id);
+
 }

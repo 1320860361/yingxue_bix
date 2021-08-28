@@ -21,6 +21,6 @@ public class Category {
 
     private Integer levels;
 
-    @Column(name = " parent_id")
+    @Column(name = "parent_id")
     private String parentId;
 }

@@ -41,7 +41,14 @@ public class CategoryController {
     @PostMapping("/category/delete")
     public CommonVo delete(@RequestBody Category category){
         log.info("接收的数据category：{}",category);
-        return categoryService.delete(category);
+
+        try {
+            String message= categoryService.delete(category);
+            return CommonVo.success(message);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return CommonVo.faild(e.getMessage());
+        }
     }
 
     @PostMapping("/category/update")

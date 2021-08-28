@@ -1,8 +1,12 @@
 package com.baizhi;
 
+import com.baizhi.dao.CategoryMapper;
 import com.baizhi.dao.FeedbackMapper;
+import com.baizhi.entity.Category;
+import com.baizhi.entity.CategoryExample;
 import com.baizhi.entity.Feedback;
 import com.baizhi.entity.FeedbackExample;
+import com.baizhi.service.CategoryService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -13,15 +17,23 @@ import java.util.List;
 class YingxueBixApplicationTests {
 
     @Resource
-    FeedbackMapper feedbackMapper;
+    CategoryMapper categoryMapper;
     @Test
     void contextLoads() {
-       List<Feedback> feedbacks = feedbackMapper.selectAll();
-
-        for (Feedback feedback : feedbacks) {
-            System.out.println(feedback);
+        Category category = new Category();
+        CategoryExample categoryExample = new CategoryExample();
+        categoryExample.createCriteria().andIdEqualTo("37");
+        //category.setId("37");
+        Category category1 = categoryMapper.selectOneByExample(categoryExample);
+        System.out.println(category1);
         }
 
+
+    @Test
+    void contextLoadss() {
+        Category category = categoryMapper.queryAllByIdS("37");
+        System.out.println(category);
     }
 
 }
+

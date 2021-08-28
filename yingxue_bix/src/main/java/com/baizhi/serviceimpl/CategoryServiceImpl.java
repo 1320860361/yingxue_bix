@@ -1,5 +1,6 @@
 package com.baizhi.serviceimpl;
 
+import com.baizhi.annotation.AddLog;
 import com.baizhi.dao.CategoryMapper;
 import com.baizhi.dto.CategoryPageDTO;
 import com.baizhi.dto.PageDTO;
@@ -10,6 +11,8 @@ import com.baizhi.util.UUIDUtil;
 import com.baizhi.vo.CommonQueryPageVO;
 import com.baizhi.vo.CommonVo;
 import org.apache.ibatis.session.RowBounds;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +23,7 @@ import java.util.List;
 @Transactional
 public class CategoryServiceImpl implements CategoryService {
 
+    private static final Logger log = LoggerFactory.getLogger(CategoryServiceImpl.class);
     @Resource
     CategoryMapper categoryMapper;
     @Override
@@ -45,6 +49,7 @@ public class CategoryServiceImpl implements CategoryService {
         return new CommonQueryPageVO(pageDTO.getPage(),total,categoryList);
     }
 
+    @AddLog(value = "添加类别")
     @Override
     public CommonVo add(Category category) {
 
@@ -68,28 +73,73 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CommonVo delete(Category category) {
-        //判断删除的是一级类别还是二级类别
+    public CommonVo deletes(Category category) {
+        return null;
+    }
+
+    /*    @AddLog(value = "删除类别")
+        @Override
+        public CommonVo delete(Category category) {
+            //判断删除的是一级类别还是二级类别
+            if(category.getParentId()==null){
+                //一级类别  判断一级类别下是否有二级类别
+                //根据一级类别ID查询该一级类别下是否有二级类别
+                CategoryExample categoryExample = new CategoryExample();
+                categoryExample.createCriteria().andParentIdEqualTo(category.getId());
+                int count = categoryMapper.selectCountByExample(categoryExample);
+                if(count==0){
+                    //没有直接删除
+                    categoryMapper.delete(category);
+                    return CommonVo.success("一级类别删除成功");
+                }else {
+                    //有不能删除
+                    return CommonVo.faild("该一级类别下存在二级类别不能删除");
+                }
+            }else {
+                //二级类别，判断该二级类别下是否有视频
+                //有     不能删除
+                //没有    直接删除
+                return CommonVo.faild("二级类别删除成功");
+            }
+        }*/
+    @AddLog(value = "删除类别")
+    @Override
+    public String delete(Category category) {
+        String message=null;
+       /* log.info("-=-=-=-=-=-=-=-");
+        log.info("-=-=-=-=-=-=-=- {}",category);
+        log.info("-=-=-=-=-=-=-=-");
+        Category category1 = categoryMapper.selectByPrimaryKey(category);
+
+        log.info("====== {}",category1.getParentId());
+        log.info("-=-=-=-=-=-=-=-");
+        log.info("-=-=-=-=666-=-=-=- {}",category1);
+        log.info("-=-=-=-=-=-=-=-");*/
+        //判断删除的是一级类别还是二级类别*/
         if(category.getParentId()==null){
             //一级类别  判断一级类别下是否有二级类别
             //根据一级类别ID查询该一级类别下是否有二级类别
             CategoryExample categoryExample = new CategoryExample();
             categoryExample.createCriteria().andParentIdEqualTo(category.getId());
+            //查询一级类别对于的二级类别数量
             int count = categoryMapper.selectCountByExample(categoryExample);
             if(count==0){
                 //没有直接删除
                 categoryMapper.delete(category);
-                return CommonVo.success("一级类别删除成功");
+                //int i=10/0;
+                message="一级类别删除成功";
             }else {
                 //有不能删除
-                return CommonVo.faild("该一级类别下存在二级类别不能删除");
+               throw new RuntimeException("该一级类别下存在二级类别不能删除");
             }
         }else {
             //二级类别，判断该二级类别下是否有视频
             //有     不能删除
+            categoryMapper.delete(category);
             //没有    直接删除
-            return CommonVo.faild("二级类别删除成功");
+           message="二级类别删除成功";
         }
+        return message;
     }
 
     @Override
@@ -97,15 +147,16 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryMapper.selectByPrimaryKey(id);
     }
 
+    @AddLog(value = "修改类别信息")
     @Override
     public CommonVo update(Category category) {
 
         try {
             categoryMapper.updateByPrimaryKeySelective(category);
-            return CommonVo.success("删除成功");
+            return CommonVo.success("修改成功");
         } catch (Exception e) {
             e.printStackTrace();
-            return CommonVo.faild("删除失败");
+            return CommonVo.faild("修改失败");
         }
     }
 

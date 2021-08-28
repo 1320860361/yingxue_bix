@@ -1,10 +1,12 @@
 package com.baizhi.serviceimpl;
 
+import com.baizhi.annotation.AddLog;
 import com.baizhi.dao.FeedbackMapper;
 import com.baizhi.entity.Feedback;
 import com.baizhi.entity.FeedbackExample;
 import com.baizhi.service.FeedbackService;
 import org.apache.ibatis.session.RowBounds;
+import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -13,7 +15,7 @@ import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
 
-@CrossOrigin    //跨域
+
 @Service
 @Transactional
 public class FeedbackServiceImpl implements FeedbackService {
