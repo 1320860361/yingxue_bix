@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.nio.channels.MulticastChannel;
 import java.util.HashMap;
 
 @CrossOrigin
@@ -40,5 +42,43 @@ public class UserController {
         log.info("修改用户数据: {}",user);
         return userService.updates(user);
     }
+    @RequestMapping("add")
+    public CommonVo add(@RequestBody User user){
+        log.info("添加用户数据: {}",user);
+        try {
+            userService.add(user);
+            return CommonVo.success("添加成功!!!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return CommonVo.faild("添加失败！！！");
+        }
+    }
+    @RequestMapping("uploadHeadImg")
+    public HashMap<String,String>uploadHeadImg(MultipartFile headImg){
+        log.info("文件名：{}",headImg.getOriginalFilename());
+        log.info("文件大小：{}",headImg.getSize());
+        log.info("文件类型：{}",headImg.getContentType());
+        String msg = userService.uploadHeadImgAliyun(headImg);
+        HashMap<String,String>map=new HashMap<>();
+        map.put("fileName",msg);
+        return map;
+    }
+    @RequestMapping("queryById")
+    public User queryById(String id){
+        log.info("查询管理员id：{}",id);
+        return userService.queryById(id);
+    }
+    @RequestMapping("delete")
+    public  CommonVo delete(@RequestBody User user) {
+        log.info("删除用户数据------：{}", user);
 
+        try {
+            userService.delete(user);
+            return CommonVo.success("删除成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("============"+e.getMessage());
+            return CommonVo.faild("删除失败");
+        }
+    }
 }
